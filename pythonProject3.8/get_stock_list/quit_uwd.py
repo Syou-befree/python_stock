@@ -4,7 +4,6 @@ import sys
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-import tushare as ts
 import pymysql
 from sqlalchemy import create_engine
 
@@ -16,22 +15,21 @@ connect = pymysql.connect(host="localhost", user="root", password="root", port=3
 cursor = connect.cursor()
 # 或：cursor=pymysql.cursors.Cursor(connect)
 # 使用游标的execute()方法执行sql语句
-cursor.execute("SELECT * FROM stock")
+cursor.execute("SELECT * FROM stock_list")
 # 使用fetchall()获取全部数据
 stockList = cursor.fetchall()
+for stock in stockList:
+    # print(type(stock[1]))
+    # exit()
+    a = stock[2].replace('-', '')
+    b = a.replace('W', '')
+    c = b.replace('D', '')
+    d = c.replace('U', '')
+    sql = 'update stock_list set name = %s where code = %s' % ("'" + d + "'", "'" + stock[3] + "'")
+    print(sql)
+    cursor.execute(sql)
+    connect.commit()
 # 关闭游标连接
 cursor.close()
 # 关闭数据库连接
 connect.close()
-
-for stock in stockList:
-  name = stock[1]
-  code = stock[2]
-  if name.find('ST') < 0:
-    df = ts.get_hist_data(code)
-    df['code'] = code
-    df['name'] = name
-    print(df)
-    # df.to_csv(f'{name}.csv')
-    df.to_sql('history_data', engine, if_exists='append', index=True, index_label='date')
-    df
