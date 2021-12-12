@@ -15,7 +15,7 @@ connect = pymysql.connect(host="localhost", user="root", password="root", port=3
 # 创建一个游标对象:有两种创建方法
 cursor = connect.cursor()
 # 使用游标的execute()方法执行sql语句
-cursor.execute("SELECT * FROM stock_list")
+cursor.execute("SELECT * FROM stock_list where status = '0'")
 # 使用fetchall()获取全部数据
 stock_list = cursor.fetchall()
 # 关闭游标连接

@@ -10,7 +10,7 @@ engine = create_engine('mysql+pymysql://root:root@localhost:3306/stock')
 
 
 def get_by_vol():
-    stock_list = pd.read_sql("SELECT code, name FROM stock_list ORDER BY list_id ASC", engine)
+    stock_list = pd.read_sql("SELECT code, name FROM stock_list where status = '0' ORDER BY list_id ASC", engine)
     stock_xml = ''
 
     for row in stock_list.itertuples():

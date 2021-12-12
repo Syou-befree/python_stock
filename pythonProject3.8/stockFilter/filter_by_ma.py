@@ -15,7 +15,7 @@ connect = pymysql.connect(host="localhost", user="root", password="root", port=3
 # 创建一个游标对象:有两种创建方法
 cursor = connect.cursor()
 # 使用游标的execute()方法执行sql语句
-cursor.execute("SELECT * FROM stock_list")
+cursor.execute("SELECT * FROM stock_list where status = '0'")
 # 使用fetchall()获取全部数据
 stock_list = cursor.fetchall()
 # 关闭游标连接
@@ -41,7 +41,7 @@ def do_filter():
             ma288 = data288['close'].sum() / 288
             ma338 = data338['close'].sum() / 338
 
-            if ma144 < ma169 < ma288 < ma338 < data.loc[0]['close'] < ma338 * 1.03:
+            if data.loc[0]['close'] < ma169 < ma144 < ma288 < ma338 and stock[5] < 5000000000:
                 print(data.loc[0]['code'] + '____' + data.loc[0]['name'])
                 if data.loc[0]['code'][0] == '6':
                     stock_xml = stock_xml + '0,'
